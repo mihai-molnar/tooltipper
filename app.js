@@ -20,9 +20,18 @@ function initFromHash() {
             tooltips.push(...data.tooltips)
             gridSizeInput.value = data.gridSize || 10
             
-            // Hide controls in view mode
-            document.body.classList.add('view-mode')
-            isViewMode = true
+            // Enable view mode only if it's explicitly a shared URL
+            if (data.shared && window.location.href !== window.location.origin + window.location.pathname) {
+                document.body.classList.add('view-mode')
+                isViewMode = true
+            } else {
+                // Ensure we're in edit mode
+                document.body.classList.remove('view-mode')
+                isViewMode = false
+            }
+            
+            // Enable share button since we have an image
+            shareBtn.disabled = false
             
             updateGrid()
             return true
@@ -132,7 +141,8 @@ function openInput(target, tt) {
             } else {
                 tooltips.push({ id: tt.id, message })
             }
-            updateShareableUrl()
+            updateShareableUrl(false)
+            shareBtn.disabled = false
         }
         input.remove()
         isInputOpened = false
@@ -142,7 +152,8 @@ function openInput(target, tt) {
         const index = tooltips.findIndex(t => t.id === tt.id)
         if (index >= 0) {
             tooltips.splice(index, 1)
-            updateShareableUrl()
+            updateShareableUrl(false)
+            shareBtn.disabled = false
         }
         input.remove()
         isInputOpened = false
@@ -196,58 +207,65 @@ function handleMouseHover(e) {
 }
 
 // Create and update shareable URL
-function updateShareableUrl() {
-    if (!grid.style.backgroundImage) {
-        shareBtn.disabled = true
-        return
-    }
+function updateShareableUrl(forSharing = false) {
+    // Always update share button state based on image presence
+    shareBtn.disabled = !grid.style.backgroundImage;
     
+    if (!grid.style.backgroundImage) {
+        return;
+    }
+
     const data = {
         image: grid.style.backgroundImage.slice(5, -2), // Remove url() wrapper
         tooltips: tooltips,
         gridSize: parseInt(gridSizeInput.value)
     }
-    
+
+    // Only add shared flag when actually sharing
+    if (forSharing) {
+        data.shared = true
+    }
+
     const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(data))
-    window.location.hash = compressed
-    shareBtn.disabled = false
+    
+    // Don't update hash when sharing (prevents view mode on refresh)
+    if (!forSharing) {
+        window.location.hash = compressed
+    }
+    
+    return compressed
 }
 
 // Handle share button click
 shareBtn.addEventListener('click', async () => {
+    // Get shareable URL without updating the current hash
+    const hash = updateShareableUrl(true)
+    const shareableUrl = `${window.location.origin}${window.location.pathname}#${hash}`
+    
     try {
-        await navigator.clipboard.writeText(window.location.href)
-        const originalText = shareBtn.textContent
-        shareBtn.textContent = 'Copied!'
-        setTimeout(() => {
-            shareBtn.textContent = originalText
-        }, 2000)
+        await navigator.clipboard.writeText(shareableUrl)
+        alert('URL copied to clipboard!')
     } catch (err) {
         console.error('Failed to copy URL:', err)
-        alert('Failed to copy URL to clipboard. Please copy it manually from the address bar.')
+        alert('Failed to copy URL to clipboard')
     }
 })
 
-// Handle image upload
+// Handle file upload
 uploadBtn.addEventListener('click', () => {
     const file = imageUpload.files[0]
-    if (!file) {
-        alert('Please select an image first')
-        return
-    }
-    
-    if (!file.type.startsWith('image/')) {
-        alert('Please select an image file')
-        return
-    }
-    
+    if (!file) return
+
     const reader = new FileReader()
     reader.onload = (e) => {
+        // Clear view mode
+        document.body.classList.remove('view-mode')
+        isViewMode = false
+        
         grid.style.backgroundImage = `url(${e.target.result})`
-        // Clear the file input for next use
-        imageUpload.value = ''
         tooltips.length = 0 // Clear existing tooltips
-        updateShareableUrl()
+        updateShareableUrl(false) // Explicitly not sharing
+        updateGrid()
     }
     reader.readAsDataURL(file)
 })
@@ -269,7 +287,13 @@ gridSizeInput.addEventListener('input', () => {
     updateShareableUrl()
 })
 
-// Initialize
-if (!initFromHash()) {
-    updateGrid()
-}
+// Initial setup
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize from hash if present
+    if (!initFromHash()) {
+        updateGrid()
+    }
+    
+    // Set initial share button state
+    shareBtn.disabled = !grid.style.backgroundImage
+})

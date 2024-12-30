@@ -255,18 +255,21 @@ function updateShareableUrl(forSharing = false) {
 
 // Handle share button click
 shareBtn.addEventListener('click', async () => {
-    // Get shareable URL without updating the current hash
     const hash = updateShareableUrl(true)
-    const shareableUrl = `${window.location.origin}${window.location.pathname}#${hash}`
-    
-    try {
-        await navigator.clipboard.writeText(shareableUrl)
-        alert('URL copied to clipboard!')
-    } catch (err) {
-        console.error('Failed to copy URL:', err)
-        alert('Failed to copy URL to clipboard')
-    }
+    const url = `${window.location.origin}${window.location.pathname}#${hash}`
+    await navigator.clipboard.writeText(url)
+    showToast('URL copied to clipboard!')
 })
+
+function showToast(message, duration = 1000) {
+    const toast = document.getElementById('toast')
+    toast.textContent = message
+    toast.classList.add('show')
+    
+    setTimeout(() => {
+        toast.classList.remove('show')
+    }, duration)
+}
 
 // Handle file upload
 uploadBtn.addEventListener('click', () => {

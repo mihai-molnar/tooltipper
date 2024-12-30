@@ -256,15 +256,49 @@ function updateShareableUrl(forSharing = false) {
     return compressed
 }
 
+// Add this new function
+async function shortenUrl(longUrl) {
+    try {
+        // Using is.gd API (no API key required)
+        const response = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(longUrl)}`)
+        const data = await response.json()
+        if (data.shorturl) {
+            return data.shorturl
+        }
+        throw new Error('Failed to get shortened URL')
+    } catch (error) {
+        console.error('Error shortening URL:', error)
+        // Return original URL if shortening fails
+        return longUrl
+    }
+}
+
 // Handle share button click
 shareBtn.addEventListener('click', async () => {
     const hash = updateShareableUrl(true)
-    const url = `${window.location.origin}${window.location.pathname}#${hash}`
-    await navigator.clipboard.writeText(url)
-    showToast('URL copied to clipboard!')
+    const longUrl = `${window.location.origin}${window.location.pathname}#${hash}`
+    
+    // Show loading state
+    shareBtn.disabled = true
+    shareBtn.textContent = 'Generating...'
+    
+    try {
+        const shortUrl = await shortenUrl(longUrl)
+        await navigator.clipboard.writeText(shortUrl)
+        showToast('Short URL copied to clipboard!')
+    } catch (error) {
+        console.error('Error sharing:', error)
+        await navigator.clipboard.writeText(longUrl)
+        showToast('URL copied to clipboard! (Shortening failed)')
+    } finally {
+        // Restore button state
+        shareBtn.disabled = false
+        shareBtn.textContent = 'Share'
+    }
 })
 
-function showToast(message, duration = 1000) {
+// Update the toast to allow for longer display times
+function showToast(message, duration = 2000) {  // Increased duration to 2 seconds
     const toast = document.getElementById('toast')
     toast.textContent = message
     toast.classList.add('show')

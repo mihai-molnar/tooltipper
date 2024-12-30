@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tooltipper - Instructions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+            color: #2d3748;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1a202c;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2d3748;
+            margin: 24px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        ul {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .back-link:hover {
+            background-color: #45a049;
+            transform: translateY(-1px);
+        }
+
+        .tip {
+            background-color: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+        }
+
+        .warning {
+            background-color: #fff5f5;
+            border-left: 4px solid #f56565;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>How to Use Tooltipper</h1>
+        
+        <h2>Getting Started</h2>
+        <p>Tooltipper allows you to add interactive tooltips to any image. Here's how to get started:</p>
+        <ul>
+            <li>Click the "Choose File" button to select an image from your computer</li>
+            <li>Click "Upload" to load your image into the editor</li>
+            <li>Adjust the grid size if needed (default is 10px)</li>
+        </ul>
+
+        <h2>Adding Tooltips</h2>
+        <p>To add tooltips to your image:</p>
+        <ul>
+            <li>Move your cursor over the image to see the grid</li>
+            <li>Click any grid cell where you want to add a tooltip</li>
+            <li>Type your tooltip text in the input box that appears</li>
+            <li>Click "Save" to add the tooltip</li>
+            <li>Hover over the grid cell to see your tooltip</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Tip:</strong> You can adjust the grid size to make the tooltip areas larger or smaller. A smaller grid size gives you more precise control over tooltip placement.
+        </div>
+
+        <h2>Editing and Deleting Tooltips</h2>
+        <ul>
+            <li>To edit a tooltip, click on a grid cell that already has a tooltip</li>
+            <li>Modify the text and click "Save"</li>
+            <li>To delete a tooltip, click on it and use the "Delete" button</li>
+        </ul>
+
+        <h2>Sharing Your Work</h2>
+        <p>To share your image with tooltips:</p>
+        <ul>
+            <li>After adding all your tooltips, click the "Share" button</li>
+            <li>The URL will be copied to your clipboard</li>
+            <li>Share this URL with others - they'll be able to see your image with tooltips in view-only mode</li>
+        </ul>
+
+        <div class="warning">
+            <strong>Note:</strong> The shared URL contains all the data for your image and tooltips. Make sure you don't share sensitive information in tooltips.
+        </div>
+
+        <a href="index.html" class="back-link">Back to Editor</a>
+    </div>
+</body>
+</html>

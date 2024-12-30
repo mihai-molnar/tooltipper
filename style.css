@@ -252,6 +252,37 @@ input[type="number"]:focus {
     background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
 }
 
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.header h1 {
+    margin: 0;
+    color: #2d3748;
+    font-size: 24px;
+}
+
+.instructions-link {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.instructions-link:hover {
+    background-color: #45a049;
+    transform: translateY(-1px);
+}
+
 /* View mode styles */
 .view-mode .controls {
     display: none;

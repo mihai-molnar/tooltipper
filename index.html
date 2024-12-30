@@ -10,16 +10,20 @@
         <div class="controls">
             <div class="upload-section">
                 <input type="file" id="imageUpload" accept="image/*">
-                <button id="uploadBtn">Upload Image</button>
+                <button id="uploadBtn">Upload</button>
             </div>
             <div class="size-control">
-                <label for="gridSize">Grid Item Size:</label>
+                <label for="gridSize">Grid Size:</label>
                 <input type="number" id="gridSize" min="5" value="10" step="1">
                 <span>px</span>
+            </div>
+            <div class="share-section">
+                <button id="shareBtn" disabled>Share</button>
             </div>
         </div>
         <div id="grid"></div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

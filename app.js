@@ -165,7 +165,10 @@ function openInput(target, tt) {
     })
     
     deleteBtn.addEventListener('click', () => {
-        tooltips = tooltips.filter(t => t.id !== tt.id)
+        const index = tooltips.findIndex(t => t.id === tt.id)
+        if (index !== -1) {
+            tooltips.splice(index, 1)  // Remove the tooltip at the found index
+        }
         // Remove has-tooltip class
         const item = document.querySelector(`[data-value="${tt.id}"]`)
         if (item) {

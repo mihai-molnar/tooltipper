@@ -34,6 +34,17 @@ function initFromHash() {
             shareBtn.disabled = false
             
             updateGrid()
+            
+            // Add has-tooltip class to items after grid is updated
+            setTimeout(() => {
+                tooltips.forEach(tt => {
+                    const item = document.querySelector(`[data-value="${tt.id}"]`)
+                    if (item) {
+                        item.classList.add('has-tooltip')
+                    }
+                })
+            }, 0)
+            
             return true
         }
     } catch (error) {
@@ -141,6 +152,11 @@ function openInput(target, tt) {
             } else {
                 tooltips.push({ id: tt.id, message })
             }
+            // Add has-tooltip class
+            const item = document.querySelector(`[data-value="${tt.id}"]`)
+            if (item) {
+                item.classList.add('has-tooltip')
+            }
             updateShareableUrl(false)
             shareBtn.disabled = false
         }
@@ -149,12 +165,13 @@ function openInput(target, tt) {
     })
     
     deleteBtn.addEventListener('click', () => {
-        const index = tooltips.findIndex(t => t.id === tt.id)
-        if (index >= 0) {
-            tooltips.splice(index, 1)
-            updateShareableUrl(false)
-            shareBtn.disabled = false
+        tooltips = tooltips.filter(t => t.id !== tt.id)
+        // Remove has-tooltip class
+        const item = document.querySelector(`[data-value="${tt.id}"]`)
+        if (item) {
+            item.classList.remove('has-tooltip')
         }
+        updateShareableUrl(false)
         input.remove()
         isInputOpened = false
     })
